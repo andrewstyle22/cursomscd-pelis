@@ -1,7 +1,6 @@
-# Mi bibliotecasd de pelis favoritas
-Curso MSCD: Proyecto Películas con el api themoviedb.org.
+# cursomscd-pelis
+Curso MSCD: Proyecto Películas con el api themoviedb.org
 
-### Javascript 
+### Javascript
 ### Jquery
 ### CSS3
-
