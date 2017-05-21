@@ -1,5 +1,6 @@
 ﻿var urlApi = 'https://api.themoviedb.org/3/discover/movie?';
 var apiKey = 'api_key=e8c6d35a6bd555573d4b93aff5b6743b';
+var total_paginas = '';
 $(document).ready(function () {
     urlApi = urlApi + apiKey;;
    // var urlApi = 'https://api.themoviedb.org/3/search/movie?api_key=2c8889cb44ec3da352062419180957cf&language=en-US&query=fairy&page=1&include_adult=true®ion=fairy&year=>1960';
@@ -11,6 +12,8 @@ var cargarTabla = function (urlApiApiKey, numero) {
     $.get(urlApiApiKey, function (respuesta, estado) {
         if (estado === 'success') {
             $('#pagina-actual').html(respuesta.page);
+            $('#total-paginas').html(respuesta.total_pages);
+            total_paginas = respuesta.total_pages;
 
             var peliculas = '<div id="centrado">';
             $.each(respuesta.results, function (indice, elemento) {
@@ -40,7 +43,7 @@ var cargarTabla = function (urlApiApiKey, numero) {
                 peliculas += '</div>';
             });
         } else {
-            var peliculas = "<di><p>Películas no disponibles en estos momentos</p></div>"
+             peliculas = "<di><p>Películas no disponibles en estos momentos</p></div>"
         }
         document.getElementById('principal').innerHTML = peliculas + '</div>';
     });
@@ -71,6 +74,7 @@ $('#adultFilm').click(function () {
     urlApi = urlApiAdulFilm;
     cargarTabla(urlApiAdulFilm, 1);
 })
+
 $('#btnBusqueda').click(function () {
     /*https://developers.themoviedb.org/3/getting-started/search-and-query-for-details*/
     var busqueda = document.getElementById('busqueda').value;
@@ -82,7 +86,7 @@ $('#btnBusqueda').click(function () {
 
 $('.fa-arrow-right').click(function () {
     var paginaActual = parseInt($('#pagina-actual').html()) + 1;
-    if (paginaActual >= 1) {
+    if ((paginaActual >= 1) && (total_paginas > paginaActual)) {
         // $('#fecha-izda').removeClass('oculto');
         cargarTabla(urlApi, paginaActual);
     }
