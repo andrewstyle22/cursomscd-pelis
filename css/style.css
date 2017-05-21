@@ -75,3 +75,6 @@ input[type=button]{
     width:40px;
     float:left;
 }
+.oculto {
+    display: none;
+}
