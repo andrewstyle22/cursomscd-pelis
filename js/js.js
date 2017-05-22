@@ -17,13 +17,13 @@ var cargarTabla = function (urlApiApiKey, numero) {
             $('#total-paginas').html(respuesta.total_pages);
             total_paginas = respuesta.total_pages;
 
-            if ((respuesta.total_pages == 1)&&(respuesta.page == 1)) {
-                $('#flecha-izda').addClass('oculto');
-                $('#flecha-derecha').addClass('oculto');
-            } else {
-                $('#flecha-izda').removeClass('oculto');
-                $('#flecha-derecha').removeClass('oculto');
-            }
+            //if ((respuesta.total_pages === 1)&&(respuesta.page === 1)) {
+            //    $('#flecha-izda').addClass('oculto');
+            //    $('#flecha-derecha').addClass('oculto');
+            //} else {
+            //    $('#flecha-izda').removeClass('oculto');
+            //    $('#flecha-derecha').removeClass('oculto');
+            //}
 
             var peliculas = '<div id="centrado">';
 
@@ -113,14 +113,16 @@ $('.fa-arrow-right').click(function () {
 });
 
 $('.fa-arrow-left').click(function () {
-    var paginaActual = parseInt($('#pagina-actual').html());
-    if (paginaActual >= 2) {
-        paginaActual--;
+    var paginaActual = parseInt($('#pagina-actual').html())-1;
+    if (paginaActual > 1) {
+        //paginaActual--;
         cargarTabla(urlApi, paginaActual);
-        if (paginaActual < 2) {
-            $('#flecha-izda').addClass('oculto');
-        } 
+        //if (paginaActual === 1) {
+        //    console.log("entró");
+        //    $('#flecha-izda').addClass('oculto');
+        //} 
     } else {
+        cargarTabla(urlApi, 1);
         $('#flecha-izda').addClass('oculto');
     }
 });
