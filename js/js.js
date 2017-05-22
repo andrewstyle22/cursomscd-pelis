@@ -17,13 +17,11 @@ var cargarTabla = function (urlApiApiKey, numero) {
             $('#total-paginas').html(respuesta.total_pages);
             total_paginas = respuesta.total_pages;
 
-            //if ((respuesta.total_pages === 1)&&(respuesta.page === 1)) {
-            //    $('#flecha-izda').addClass('oculto');
-            //    $('#flecha-derecha').addClass('oculto');
-            //} else {
-            //    $('#flecha-izda').removeClass('oculto');
-            //    $('#flecha-derecha').removeClass('oculto');
-            //}
+            if ((respuesta.total_pages === 1)&&(respuesta.page === 1)) {
+                $('#flecha-derecha').addClass('oculto');
+            } else {
+                $('#flecha-derecha').removeClass('oculto');
+            }
 
             var peliculas = '<div id="centrado">';
 
