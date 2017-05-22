@@ -1,9 +1,12 @@
 ﻿var urlApi = 'https://api.themoviedb.org/3/discover/movie?';
 var apiKey = 'api_key=e8c6d35a6bd555573d4b93aff5b6743b';
+var total_paginas = '';
+
 $(document).ready(function () {
-    urlApi = urlApi + apiKey;;
+    urlApi = urlApi + apiKey;
    // var urlApi = 'https://api.themoviedb.org/3/search/movie?api_key=2c8889cb44ec3da352062419180957cf&language=en-US&query=fairy&page=1&include_adult=true®ion=fairy&year=>1960';
     cargarTabla(urlApi, 1);
+    $('#flecha-izda').addClass('oculto');
 });
 
 var cargarTabla = function (urlApiApiKey, numero) {
@@ -11,8 +14,17 @@ var cargarTabla = function (urlApiApiKey, numero) {
     $.get(urlApiApiKey, function (respuesta, estado) {
         if (estado === 'success') {
             $('#pagina-actual').html(respuesta.page);
+            $('#total-paginas').html(respuesta.total_pages);
+            total_paginas = respuesta.total_pages;
+
+            if ((respuesta.total_pages === 1)&&(respuesta.page === 1)) {
+                $('#flecha-derecha').addClass('oculto');
+            } else {
+                $('#flecha-derecha').removeClass('oculto');
+            }dfsdfsdf
 
             var peliculas = '<div id="centrado">';
+
             $.each(respuesta.results, function (indice, elemento) {
                 peliculas += '<div class="tarjeta">';
                 peliculas += '<div class="idTitulo"><p class="titulo">' + elemento.title + '</p></div>';
@@ -40,67 +52,78 @@ var cargarTabla = function (urlApiApiKey, numero) {
                 peliculas += '</div>';
             });
         } else {
-            var peliculas = "<di><p>Películas no disponibles en estos momentos</p></div>"
+             peliculas = "<di><p>Películas no disponibles en estos momentos</p></div>"
         }
         document.getElementById('principal').innerHTML = peliculas + '</div>';
     });
 }
 
+$('#inicio').click(function () {
+    urlApi = 'https://api.themoviedb.org/3/discover/movie?' + apiKey;
+    cargarTabla(urlApi, 1);
+});
+
 $('#popularity').click(function () {
     var UrlApiPopularity = urlApi + 'certification_country=US&certification=R&sort_by=popularity&' + apiKey;
-    urlApi = UrlApiPopularity;
+   //urlApi = UrlApiPopularity;
     cargarTabla(UrlApiPopularity, 1);
-})
+});
 
 $('#voteCount').click(function () {
     var urlApiVoteCount = urlApi + 'certification_country=US&certification=R&sort_by=vote_count.desc&' + apiKey;
-    urlApi = urlApiVoteCount;
+    //urlApi = urlApiVoteCount;
     cargarTabla(urlApiVoteCount, 1);
-})
+});
 
 $('#voteAverage').click(function () {
     var urlApiVoteAverage = urlApi + 'certification_country=US&certification=R&sort_by=vote_average.desc&' + apiKey;
-    urlApi = urlApiVoteAverage;
+    //urlApi = urlApiVoteAverage;
     cargarTabla(urlApiVoteAverage, 1);
-})
+});
 
 $('#adultFilm').click(function () {
     /*var urlApi = urlApi + 'api_key=e8c6d35a6bd555573d4b93aff5b6743b&/movie/?&sort_by=adult.eq=true&sort_by=vote_average.desc';*/
     //var urlApi = 'https://api.themoviedb.org/3/discover/movie?api_key=e8c6d35a6bd555573d4b93aff5b6743b&certification_country=US&certification.lte=R';
     var urlApiAdulFilm = urlApi + '&certification_country=US&certification.lte=R&' + apiKey;
-    urlApi = urlApiAdulFilm;
+    //urlApi = urlApiAdulFilm;
     cargarTabla(urlApiAdulFilm, 1);
-})
+});
+
 $('#btnBusqueda').click(function () {
     /*https://developers.themoviedb.org/3/getting-started/search-and-query-for-details*/
     var busqueda = document.getElementById('busqueda').value;
     urlApiBusqueda = 'https://api.themoviedb.org/3/search/movie?api_key=e8c6d35a6bd555573d4b93aff5b6743b&query=' + busqueda;
     //var urlApiBusqueda = 'https://api.themoviedb.org/3/search/movie?' + apiKey + '&query=' + busqueda;
-    urlApi = urlApiBusqueda;
+    //urlApi = urlApiBusqueda;
     cargarTabla(urlApiBusqueda, 1);
-})
+});
 
 $('.fa-arrow-right').click(function () {
-    var paginaActual = parseInt($('#pagina-actual').html()) + 1;
-    if (paginaActual >= 1) {
-        // $('#fecha-izda').removeClass('oculto');
+    var paginaActual = parseInt($('#pagina-actual').html());
+    if ((paginaActual >= 1) && (total_paginas > paginaActual)) {
+        $('#flecha-derecha').removeClass('oculto');
+        $('#flecha-izda').removeClass('oculto');
+        paginaActual++;
         cargarTabla(urlApi, paginaActual);
+    } else {
+        $('#flecha-derecha').addClass('oculto');
     }
-    /*else {
-        $('#fecha-izda').addClass('oculto');
-    }*/
-})
+});
 
 $('.fa-arrow-left').click(function () {
-    var paginaActual = parseInt($('#pagina-actual').html()) - 1;
-    if (paginaActual >= 1) {
-        //$('#fecha-izda').addClass('oculto');
+    var paginaActual = parseInt($('#pagina-actual').html())-1;
+    if (paginaActual > 1) {
+        //paginaActual--;
         cargarTabla(urlApi, paginaActual);
-    } /*else {
-        $('#fecha-izda').removeClass('oculto');
-    }*/
-})
-
+        //if (paginaActual === 1) {
+        //    console.log("entró");
+        //    $('#flecha-izda').addClass('oculto');
+        //} 
+    } else {
+        cargarTabla(urlApi, 1);
+        $('#flecha-izda').addClass('oculto');
+    }
+});
 
 /*
  * https://developers.themoviedb.org/3/search/search-movies
