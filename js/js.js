@@ -21,7 +21,7 @@ var cargarTabla = function (urlApiApiKey, numero) {
                 $('#flecha-derecha').addClass('oculto');
             } else {
                 $('#flecha-derecha').removeClass('oculto');
-            }
+            }dfsdfsdf
 
             var peliculas = '<div id="centrado">';
 
